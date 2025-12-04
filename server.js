@@ -30,7 +30,7 @@ app.get('/scrape', async (req, res) => {
     
     browser = await puppeteer.launch({
       headless: true,
-      executablePath: puppeteer.executablePath(), // Usa o Chrome que o Puppeteer baixou
+      executablePath: '/usr/bin/google-chrome-stable',
       args: [
         '--no-sandbox',
         '--disable-setuid-sandbox',
