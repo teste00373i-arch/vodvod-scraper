@@ -1,6 +1,10 @@
 ﻿FROM node:18-slim
 
-# Instalar dependências do Playwright Chromium
+# Variáveis de ambiente do Playwright
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=0
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
+
+# Instalar dependências do sistema necessárias para o Chromium
 RUN apt-get update && apt-get install -y \
     libnss3 \
     libnspr4 \
@@ -20,24 +24,32 @@ RUN apt-get update && apt-get install -y \
     libcairo2 \
     libatspi2.0-0 \
     libxshmfence1 \
+    fonts-liberation \
+    libappindicator3-1 \
+    libu2f-udev \
+    libvulkan1 \
+    xdg-utils \
+    wget \
+    ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copiar package.json
+# Copiar arquivos de configuração
 COPY package*.json ./
 
-# Instalar dependências
-RUN npm install
+# Instalar dependências do Node
+RUN npm ci --only=production
 
-# Instalar navegadores do Playwright
-RUN npx playwright install chromium --with-deps
+# Instalar Chromium do Playwright
+RUN npx playwright install chromium
+RUN npx playwright install-deps chromium
 
-# Copiar código
+# Copiar código fonte
 COPY . .
 
 # Expor porta
 EXPOSE 3001
 
 # Iniciar aplicação
-CMD ["npm", "start"]
+CMD ["node", "index.js"]
