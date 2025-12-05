@@ -75,7 +75,7 @@ app.get('/scrape', async (req, res) => {
 
     // Esperar os VODs carregarem
     // Aguardar p�gina carregar
-    await page.waitForTimeout(5000))
+    await page.waitForTimeout(5000)
 
     // Extrair dados dos VODs
     const vods = await page.evaluate(() => {
@@ -168,5 +168,6 @@ app.listen(PORT, () => {
   console.log(`🚀 VOD Scraper rodando na porta ${PORT}`)
   console.log(`📍 URL: http://localhost:${PORT}`)
 })
+
 
 
